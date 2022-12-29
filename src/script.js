@@ -21,6 +21,10 @@ const scene = new THREE.Scene()
 const textureLoader = new THREE.TextureLoader()
 
 const matCapTexture = textureLoader.load('/textures/matcaps/8.png')
+const matCapTexture2 = textureLoader.load('/textures/matcaps/9.png')
+const matCapTexture3 = textureLoader.load('/textures/matcaps/10.png')
+const matCapTexture4 = textureLoader.load('/textures/matcaps/11.png')
+
 
 // Fonts
 const fontLoader = new FontLoader()
@@ -28,18 +32,17 @@ fontLoader.load(
   '/fonts/helvetiker_regular.typeface.json',
   (font) => {
     const textGeometry = new TextGeometry(
-      // écrire plusieurs lignes de texte:
       '2023',
       {
         font: font,
         size: 0.5, // taille du texte
         height: 0.2, // épaisseur du texte
-        curveSegments: 5, // nombre de segments de courbe
+        curveSegments: 16, // nombre de segments de courbe
         bevelEnabled: true, // activer le bevel
         bevelThickness: 0.03, // épaisseur du bevel
         bevelSize: 0.02, // taille du bevel
         bevelOffset: 0, // décalage du bevel
-        bevelSegments: 4 // nombre de segments de bevel
+        bevelSegments: 8 // nombre de segments de bevel
         // le bevel est une sorte de bordure
       }
     )
@@ -47,14 +50,16 @@ fontLoader.load(
 
     textGeometry.center()
 
-    const material = new THREE.MeshMatcapMaterial({ matcap: matCapTexture })
-    // textMaterial.wireframe = true
+    // Material
+    const material = new THREE.MeshMatcapMaterial({
+      matcap: matCapTexture4
+    })
+
+
     const text = new THREE.Mesh(textGeometry, material)
     scene.add(text)
   }
 )
-
-
 
 /**
  * Sizes
@@ -84,9 +89,9 @@ window.addEventListener('resize', () =>
  */
 // Base camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
-camera.position.x = 1
-camera.position.y = 1
-camera.position.z = 2
+// camera.position.x = 1
+// camera.position.y = 1
+camera.position.z = 1
 scene.add(camera)
 
 // Controls
