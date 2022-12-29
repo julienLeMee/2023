@@ -1,6 +1,8 @@
 import './style.css'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js'
+import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js'
 import * as dat from 'lil-gui'
 
 /**
@@ -15,20 +17,44 @@ const canvas = document.querySelector('canvas.webgl')
 // Scene
 const scene = new THREE.Scene()
 
-/**
- * Textures
- */
+// Textures
 const textureLoader = new THREE.TextureLoader()
 
-/**
- * Object
- */
-const cube = new THREE.Mesh(
-    new THREE.BoxGeometry(1, 1, 1),
-    new THREE.MeshBasicMaterial()
+const matCapTexture = textureLoader.load('/textures/matcaps/8.png')
+
+// Fonts
+const fontLoader = new FontLoader()
+fontLoader.load(
+  '/fonts/helvetiker_regular.typeface.json',
+  (font) => {
+    const textGeometry = new TextGeometry(
+      // écrire plusieurs lignes de texte:
+      '2023',
+      {
+        font: font,
+        size: 0.5, // taille du texte
+        height: 0.2, // épaisseur du texte
+        curveSegments: 5, // nombre de segments de courbe
+        bevelEnabled: true, // activer le bevel
+        bevelThickness: 0.03, // épaisseur du bevel
+        bevelSize: 0.02, // taille du bevel
+        bevelOffset: 0, // décalage du bevel
+        bevelSegments: 4 // nombre de segments de bevel
+        // le bevel est une sorte de bordure
+      }
+    )
+
+
+    textGeometry.center()
+
+    const material = new THREE.MeshMatcapMaterial({ matcap: matCapTexture })
+    // textMaterial.wireframe = true
+    const text = new THREE.Mesh(textGeometry, material)
+    scene.add(text)
+  }
 )
 
-scene.add(cube)
+
 
 /**
  * Sizes
@@ -71,7 +97,8 @@ controls.enableDamping = true
  * Renderer
  */
 const renderer = new THREE.WebGLRenderer({
-    canvas: canvas
+    canvas: canvas,
+    antialias: true
 })
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
