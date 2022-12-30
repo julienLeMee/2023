@@ -102,6 +102,21 @@ glassDisk.position.y = -7.5
 scene.add(glassDisk)
 
 /**
+ * Table
+ */
+const tableGeometry = new THREE.BoxGeometry(150, 0.1, 150) // largeur, hauteur, profondeur
+const tableMaterial = new THREE.MeshMatcapMaterial({ matcap: matCapTexture3 })
+const table = new THREE.Mesh(tableGeometry, tableMaterial)
+table.position.y = -7.6
+scene.add(table)
+
+/**
+ * Fog
+ */
+const fog = new THREE.Fog('#262837', 15, 40)
+scene.fog = fog
+
+/**
  * Sizes
  */
 const sizes = {
@@ -150,6 +165,7 @@ const renderer = new THREE.WebGLRenderer({
 })
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+renderer.setClearColor('#262837')
 
 /**
  * Animate
