@@ -159,10 +159,30 @@ window.addEventListener('mousemove', (event) =>
     mouse.y = - (event.clientY / sizes.height) * 2 + 1 // position de la souris sur l'axe y entre -1 et 1
 })
 
+// recuperer la position du doigt sur l'ecran
+let touchX = 0 // position du doigt sur l'axe x
+let touchY = 0 // position du doigt sur l'axe y
+window.addEventListener('touchmove', e => {
+  touchX = e.touches[0].clientX // récupère la position du doigt sur l'axe x
+  touchY = e.touches[0].clientY // récupère la position du doigt sur l'axe y
+})
+
 // score
 let score = document.querySelector('.score')
 
 window.addEventListener('click', () => {
+  if (currentIntersect) {
+    currentIntersect.object.visible = false
+    score.innerHTML = parseInt(score.innerHTML) + 1
+    const bubble = new THREE.Mesh(bubbleGeometry, bubbleMaterial)
+    bubble.position.x = (Math.random() - 0.5) * 1.5
+    bubble.position.y = - (Math.random() * 1.5)
+    bubble.position.z = (Math.random() - 0.5) * 1.5
+    bubbles.add(bubble)
+  }
+})
+
+window.addEventListener('touchstart', () => {
   if (currentIntersect) {
     currentIntersect.object.visible = false
     score.innerHTML = parseInt(score.innerHTML) + 1
@@ -182,18 +202,10 @@ let interval = setInterval(() => {
   timer.innerHTML = time
   if (time === 0) {
     clearInterval(interval)
-    alert('Game Over')
+    alert(`Votre score est de ${score.innerHTML}`)
     window.location.reload()
   }
 }, 1000)
-
-// recuperer la position du doigt sur l'ecran
-let touchX = 0 // position du doigt sur l'axe x
-let touchY = 0 // position du doigt sur l'axe y
-window.addEventListener('touchmove', e => {
-  touchX = e.touches[0].clientX // récupère la position du doigt sur l'axe x
-  touchY = e.touches[0].clientY // récupère la position du doigt sur l'axe y
-})
 
 /**
  * Camera
@@ -255,12 +267,16 @@ const tick = () =>
     // Cast a ray from the mouse and handle events
     raycaster.setFromCamera(mouse, camera)
     const intersects = raycaster.intersectObjects(bubbles.children)
+    if (currentIntersect) {
+      document.body.style.cursor = 'crosshair'
+    } else {
+      document.body.style.cursor = 'default'
+    }
     if(intersects.length)
     {
         if(!currentIntersect)
         {
             console.log('mouse enter')
-            document.body.style.cursor = 'crosshair'
         }
 
         currentIntersect = intersects[0]
