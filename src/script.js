@@ -35,7 +35,7 @@ fontLoader.load(
       '2023',
       {
         font: font,
-        size: 0.5, // taille du texte
+        size: 0.3, // taille du texte
         height: 0.2, // épaisseur du texte
         curveSegments: 16, // nombre de segments de courbe
         bevelEnabled: true, // activer le bevel
@@ -60,6 +60,49 @@ fontLoader.load(
     scene.add(text)
   }
 )
+
+// Balloon
+const balloonGeometry = new THREE.SphereGeometry(0.1, 32, 32)
+const balloonMaterial = new THREE.MeshMatcapMaterial({
+  matcap: matCapTexture,
+  transparent: true, // rendre le matériau transparent
+  opacity: 0.8,
+  side: THREE.DoubleSide,
+  depthWrite: false,
+  blending: THREE.AdditiveBlending
+})
+
+// creer des baloons qui vont en boucle de haut en bas de l'ecran comme des bulles de savon
+const balloonCount = 50
+const balloons = new THREE.Group()
+for (let i = 0; i < balloonCount; i++) {
+  const balloon = new THREE.Mesh(balloonGeometry, balloonMaterial)
+  balloon.position.x = (Math.random() - 0.5) * 1.4
+  balloon.position.y = - (Math.random() * 1.5)
+  balloon.position.z = (Math.random() - 0.5) * 1.4
+  balloons.add(balloon)
+}
+scene.add(balloons)
+
+// champagne glass
+const glassGeometry = new THREE.CylinderGeometry(1.1, 1.1, 5, 32, 1, true) // rayon du haut, rayon du bas, hauteur, nombre de segments, nombre de segments de hauteur, ouverture du verre
+const glassMaterial = new THREE.MeshMatcapMaterial({ matcap: matCapTexture2 })
+const glass = new THREE.Mesh(glassGeometry, glassMaterial)
+glass.position.y = -0.5
+scene.add(glass)
+
+const glassFootGeometry = new THREE.CylinderGeometry(0.1, 0.1, 5, 32)
+const glassFootMaterial = new THREE.MeshMatcapMaterial({ matcap: matCapTexture3 })
+const glassFoot = new THREE.Mesh(glassFootGeometry, glassFootMaterial)
+glassFoot.position.y = -5
+scene.add(glassFoot)
+
+// socle du verre
+const glassDiskGeometry = new THREE.CylinderGeometry(1.1, 1.1, 0.1, 32)
+const glassDiskMaterial = new THREE.MeshMatcapMaterial({ matcap: matCapTexture3 })
+const glassDisk = new THREE.Mesh(glassDiskGeometry, glassDiskMaterial)
+glassDisk.position.y = -7.5
+scene.add(glassDisk)
 
 /**
  * Sizes
@@ -91,12 +134,15 @@ window.addEventListener('resize', () =>
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
 // camera.position.x = 1
 // camera.position.y = 1
-camera.position.z = 1
+camera.position.z = 15
 scene.add(camera)
 
 // Controls
 const controls = new OrbitControls(camera, canvas)
 controls.enableDamping = true
+
+controls.minDistance = 1
+controls.maxDistance = 15
 
 /**
  * Renderer
@@ -113,9 +159,40 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
  */
 const clock = new THREE.Clock()
 
+// recuperer la position de la souris sur l'ecran
+let mouseX = 0 // position de la souris sur l'axe x
+let mouseY = 0 // position de la souris sur l'axe y
+window.addEventListener('mousemove', e => {
+  mouseX = e.clientX // récupère la position de la souris sur l'axe x
+  mouseY = e.clientY // récupère la position de la souris sur l'axe y
+
+  mouseX = Math.max(-1, Math.min(1, mouseX / sizes.width * 2 - 1))
+  mouseY = Math.max(-1, Math.min(1, -mouseY / sizes.height * 2 + 1))
+})
+
+// recuperer la position du doigt sur l'ecran
+let touchX = 0 // position du doigt sur l'axe x
+let touchY = 0 // position du doigt sur l'axe y
+window.addEventListener('touchmove', e => {
+  touchX = e.touches[0].clientX // récupère la position du doigt sur l'axe x
+  touchY = e.touches[0].clientY // récupère la position du doigt sur l'axe y
+})
+
 const tick = () =>
 {
     const elapsedTime = clock.getElapsedTime()
+
+    camera.position.x = mouseX * 0.3
+    camera.position.y = mouseY * 0.3
+
+    // faire bouger les baloons
+    balloons.children.forEach(balloon => {
+      balloon.position.y += 0.001
+
+      if (balloon.position.y > 1.5) {
+        balloon.position.y = -1.5
+      }
+    })
 
     // Update controls
     controls.update()
