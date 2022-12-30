@@ -1,0 +1,99 @@
+@import url(https://fonts.googleapis.com/css2?family=Special+Elite&display=swap);
+*
+{
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body
+{
+    overflow: hidden;
+}
+
+.webgl
+{
+    position: fixed;
+    top: 0;
+    left: 0;
+    outline: none;
+}
+
+.rules {
+  color: #fff;
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  margin-top: 4px;
+  font-family: 'Special Elite', cursive;
+}
+
+.infos {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+button {
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    padding: 10px;
+    border: 1px solid #fff;
+    color: #303030;
+    background-color: aliceblue;
+    border-radius: 5px;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+.score-box {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  position: absolute;
+  top: 10%;
+  right: 10%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  width: 100px;
+  padding: 10px;
+  border: 1px solid #fff;
+  color: #303030;
+  background-color: aliceblue;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+.timer {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  width: 100px;
+  padding: 10px;
+  border: 1px solid #fff;
+  color: #303030;
+  background-color: aliceblue;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+
+/*# sourceMappingURL=main.css.map*/
