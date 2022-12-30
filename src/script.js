@@ -3,13 +3,10 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js'
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js'
-import * as dat from 'lil-gui'
 
 /**
  * Base
  */
-// Debug
-const gui = new dat.GUI()
 
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
@@ -61,9 +58,9 @@ fontLoader.load(
   }
 )
 
-// Balloon
-const balloonGeometry = new THREE.SphereGeometry(0.1, 32, 32)
-const balloonMaterial = new THREE.MeshMatcapMaterial({
+// Bubbles
+const bubbleGeometry = new THREE.SphereGeometry(0.1, 32, 32)
+const bubbleMaterial = new THREE.MeshMatcapMaterial({
   matcap: matCapTexture,
   transparent: true, // rendre le matériau transparent
   opacity: 0.8,
@@ -73,16 +70,16 @@ const balloonMaterial = new THREE.MeshMatcapMaterial({
 })
 
 // creer des baloons qui vont en boucle de haut en bas de l'ecran comme des bulles de savon
-const balloonCount = 50
-const balloons = new THREE.Group()
-for (let i = 0; i < balloonCount; i++) {
-  const balloon = new THREE.Mesh(balloonGeometry, balloonMaterial)
-  balloon.position.x = (Math.random() - 0.5) * 1.4
-  balloon.position.y = - (Math.random() * 1.5)
-  balloon.position.z = (Math.random() - 0.5) * 1.4
-  balloons.add(balloon)
+const bubbleCount = 50
+const bubbles = new THREE.Group()
+for (let i = 0; i < bubbleCount; i++) {
+  const bubble = new THREE.Mesh(bubbleGeometry, bubbleMaterial)
+  bubble.position.x = (Math.random() - 0.5) * 1.5
+  bubble.position.y = - (Math.random() * 1.5)
+  bubble.position.z = (Math.random() - 0.5) * 1.5
+  bubbles.add(bubble)
 }
-scene.add(balloons)
+scene.add(bubbles)
 
 // champagne glass
 const glassGeometry = new THREE.CylinderGeometry(1.1, 1.1, 5, 32, 1, true) // rayon du haut, rayon du bas, hauteur, nombre de segments, nombre de segments de hauteur, ouverture du verre
@@ -178,6 +175,8 @@ window.addEventListener('touchmove', e => {
   touchY = e.touches[0].clientY // récupère la position du doigt sur l'axe y
 })
 
+const btn = document.querySelector('button')
+
 const tick = () =>
 {
     const elapsedTime = clock.getElapsedTime()
@@ -186,12 +185,17 @@ const tick = () =>
     camera.position.y = mouseY * 0.3
 
     // faire bouger les baloons
-    balloons.children.forEach(balloon => {
-      balloon.position.y += 0.001
+    bubbles.children.forEach(bubble => {
+      bubble.position.y += 0.001
 
-      if (balloon.position.y > 1.5) {
-        balloon.position.y = -1.5
+      if (bubble.position.y > 1.5) {
+        bubble.position.y = -1.5
       }
+    })
+
+    // se rapprocher lentement du verre quand on clique sur le bouton
+    btn.addEventListener('click', () => {
+      camera.position.z = 1
     })
 
     // Update controls
