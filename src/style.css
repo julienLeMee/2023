@@ -18,6 +18,12 @@ body
     outline: none;
 }
 
+.infos {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
 button {
     position: absolute;
     top: 10%;
@@ -26,8 +32,8 @@ button {
     z-index: 1;
     padding: 10px;
     border: 1px solid #fff;
-    background: none;
-    color: aliceblue;
+    color: #303030;
+    background-color: aliceblue;
     border-radius: 5px;
     font-size: 20px;
     font-weight: bold;
@@ -35,7 +41,44 @@ button {
     transition: 0.5s;
 }
 
-button:hover {
-    background: #fff;
-    color: #000;
+.score-box {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  position: absolute;
+  top: 10%;
+  right: 10%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  width: 100px;
+  padding: 10px;
+  border: 1px solid #fff;
+  color: #303030;
+  background-color: aliceblue;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+.timer {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  width: 100px;
+  padding: 10px;
+  border: 1px solid #fff;
+  color: #303030;
+  background-color: aliceblue;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.5s;
 }

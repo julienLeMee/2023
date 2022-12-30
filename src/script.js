@@ -140,6 +140,62 @@ window.addEventListener('resize', () =>
 })
 
 /**
+ * Raycaster
+ */
+const raycaster = new THREE.Raycaster()
+let currentIntersect = null
+const rayOrigin = new THREE.Vector3(- 3, 0, 0)
+const rayDirection = new THREE.Vector3(10, 0, 0)
+rayDirection.normalize()
+
+/**
+ * Mouse
+ */
+const mouse = new THREE.Vector2()
+
+window.addEventListener('mousemove', (event) =>
+{
+    mouse.x = event.clientX / sizes.width * 2 - 1 // position de la souris sur l'axe x entre -1 et 1
+    mouse.y = - (event.clientY / sizes.height) * 2 + 1 // position de la souris sur l'axe y entre -1 et 1
+})
+
+// score
+let score = document.querySelector('.score')
+
+window.addEventListener('click', () => {
+  if (currentIntersect) {
+    currentIntersect.object.visible = false
+    score.innerHTML = parseInt(score.innerHTML) + 1
+    const bubble = new THREE.Mesh(bubbleGeometry, bubbleMaterial)
+    bubble.position.x = (Math.random() - 0.5) * 1.5
+    bubble.position.y = - (Math.random() * 1.5)
+    bubble.position.z = (Math.random() - 0.5) * 1.5
+    bubbles.add(bubble)
+  }
+})
+
+// timer
+let timer = document.querySelector('.timer')
+let time = 60
+let interval = setInterval(() => {
+  time--
+  timer.innerHTML = time
+  if (time === 0) {
+    clearInterval(interval)
+    alert('Game Over')
+    window.location.reload()
+  }
+}, 1000)
+
+// recuperer la position du doigt sur l'ecran
+let touchX = 0 // position du doigt sur l'axe x
+let touchY = 0 // position du doigt sur l'axe y
+window.addEventListener('touchmove', e => {
+  touchX = e.touches[0].clientX // récupère la position du doigt sur l'axe x
+  touchY = e.touches[0].clientY // récupère la position du doigt sur l'axe y
+})
+
+/**
  * Camera
  */
 // Base camera
@@ -172,24 +228,6 @@ renderer.setClearColor('#262837')
  */
 const clock = new THREE.Clock()
 
-// recuperer la position de la souris sur l'ecran
-let mouseX = 0 // position de la souris sur l'axe x
-let mouseY = 0 // position de la souris sur l'axe y
-window.addEventListener('mousemove', e => {
-  mouseX = e.clientX // récupère la position de la souris sur l'axe x
-  mouseY = e.clientY // récupère la position de la souris sur l'axe y
-
-  mouseX = Math.max(-1, Math.min(1, mouseX / sizes.width * 2 - 1))
-  mouseY = Math.max(-1, Math.min(1, -mouseY / sizes.height * 2 + 1))
-})
-
-// recuperer la position du doigt sur l'ecran
-let touchX = 0 // position du doigt sur l'axe x
-let touchY = 0 // position du doigt sur l'axe y
-window.addEventListener('touchmove', e => {
-  touchX = e.touches[0].clientX // récupère la position du doigt sur l'axe x
-  touchY = e.touches[0].clientY // récupère la position du doigt sur l'axe y
-})
 
 const btn = document.querySelector('button')
 
@@ -197,8 +235,8 @@ const tick = () =>
 {
     const elapsedTime = clock.getElapsedTime()
 
-    camera.position.x = mouseX * 0.3
-    camera.position.y = mouseY * 0.3
+    camera.position.x = -mouse.x * 0.3
+    camera.position.y = -mouse.y * 0.3
 
     // faire bouger les baloons
     bubbles.children.forEach(bubble => {
@@ -213,6 +251,29 @@ const tick = () =>
     btn.addEventListener('click', () => {
       camera.position.z = 1
     })
+
+    // Cast a ray from the mouse and handle events
+    raycaster.setFromCamera(mouse, camera)
+    const intersects = raycaster.intersectObjects(bubbles.children)
+    if(intersects.length)
+    {
+        if(!currentIntersect)
+        {
+            console.log('mouse enter')
+            document.body.style.cursor = 'crosshair'
+        }
+
+        currentIntersect = intersects[0]
+    }
+    else
+    {
+        if(currentIntersect)
+        {
+            console.log('mouse leave')
+        }
+
+        currentIntersect = null
+    }
 
     // Update controls
     controls.update()
