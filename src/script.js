@@ -182,7 +182,7 @@ window.addEventListener('click', () => {
   }
 })
 
-window.addEventListener('touchstart', () => {
+window.addEventListener('touchmove', () => {
   if (currentIntersect) {
     currentIntersect.object.visible = false
     score.innerHTML = parseInt(score.innerHTML) + 1
