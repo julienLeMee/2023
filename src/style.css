@@ -22,26 +22,28 @@ body
 
 .rules {
   color: #fff;
-  position: absolute;
-  top: 15%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   z-index: 1;
-  margin-top: 4px;
+  margin-top: 12px;
   font-family: 'Special Elite', cursive;
 }
 
-.infos {
+.title {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#infos {
+  position: absolute;
+  width: 100%;
+  height: 150px;
   display: flex;
   justify-content: space-around;
   align-items: center;
 }
 
 button {
-    position: absolute;
-    top: 10%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     z-index: 1;
     padding: 10px;
     border: 1px solid #fff;
@@ -58,10 +60,6 @@ button {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  position: absolute;
-  top: 10%;
-  right: 10%;
-  transform: translate(-50%, -50%);
   z-index: 1;
   width: 100px;
   padding: 10px;
@@ -79,10 +77,6 @@ button {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  position: absolute;
-  top: 10%;
-  left: 10%;
-  transform: translate(-50%, -50%);
   z-index: 1;
   width: 100px;
   padding: 10px;
