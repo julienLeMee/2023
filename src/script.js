@@ -259,10 +259,16 @@ const tick = () =>
       }
     })
 
-    // se rapprocher lentement du verre quand on clique sur le bouton
     btn.addEventListener('click', () => {
       camera.position.z = 1
     })
+
+    // mobile
+    if (window.matchMedia("(max-width: 768px)").matches) {
+      controls.enableDamping = false
+      controls.minDistance = 1
+      controls.maxDistance = 15
+    }
 
     // Cast a ray from the mouse and handle events
     raycaster.setFromCamera(mouse, camera)
